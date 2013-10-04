@@ -1,29 +1,41 @@
-# Liquid::Cli
+# Liquid-CLI
 
-TODO: Write a gem description
+A command-line wrapper over the [liquid][] ruby library by Shopify.
+
+[liquid]: https://github.com/Shopify/liquid
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'liquid-cli'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install liquid-cli
 
 ## Usage
 
-TODO: Write usage instructions here
+Supply a template on `stdin` and an optional context as JSON.
 
-## Contributing
+    $ echo 'Hi, my name is {{ name }}.' | liquid '{ "name": "Pat" }'
+    Hi, my name is Pat.
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+Use shell redirection to make handling larger templates and contexts 
+easier:
+
+    $ cat context.json
+    {
+      "title": "A title",
+      "posts": [
+        {
+          "link": "/posts/foo",
+          "content": "Foo"
+        },
+        {
+          "link": "/posts/bar",
+          "content": "Bar"
+        }
+      ]
+    }
+
+    $ liquid "$(< context.json)" <<EOF
+    <h1>{{ title }}</h1>
+    {% for post in posts %}
+      <a href="{{ post.link }}">{{ post.content }}</a>
+    {% endfor %}
+    EOF
