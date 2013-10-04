@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+#
+# pbrisbin 2013
+#
+###
+require 'liquid/cli'
+
+$stdout.write(
+  Liquid::Cli.new(ARGV.first || '{}').render($stdin.read)
+)
